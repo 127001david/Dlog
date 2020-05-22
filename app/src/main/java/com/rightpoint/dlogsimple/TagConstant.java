@@ -7,4 +7,5 @@ package com.rightpoint.dlogsimple;
  */
 public class TagConstant {
     public final static String TAG_PROCESS = "tag_process";
+    public final static String JPUSH_REC = "tag_jpush_rec";
 }

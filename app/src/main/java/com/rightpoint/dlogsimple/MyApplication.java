@@ -4,6 +4,8 @@ import android.app.Application;
 
 import com.rightpoint.dlog.Dlog;
 
+import cn.jpush.android.api.JPushInterface;
+
 /**
  * Description：
  * @author Wonder Wei
@@ -16,5 +18,10 @@ public class MyApplication extends Application {
 
         Dlog.init(this);
         Dlog.d(TagConstant.TAG_PROCESS, Dlog.getProcessName(this));
+
+        JPushInterface.setDebugMode(true);
+        JPushInterface.init(this);
+
+        Dlog.d("registerID", JPushInterface.getRegistrationID(this));
     }
 }

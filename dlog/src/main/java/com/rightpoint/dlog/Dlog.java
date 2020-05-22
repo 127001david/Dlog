@@ -2,6 +2,7 @@ package com.rightpoint.dlog;
 
 import android.app.ActivityManager;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Environment;
 
 import androidx.annotation.NonNull;
@@ -32,17 +33,17 @@ public class Dlog {
 
         String SDCARD = Environment.getExternalStorageDirectory().getAbsolutePath();
         String processName = getProcessName(context);
-        String logPath = SDCARD + "/marssample/log/" + processName;
+        String logPath = SDCARD + "/mars/log/" + processName;
 
         String cachePath = context.getFilesDir() + "/xlog/" + processName;
 
         if (BuildConfig.DEBUG) {
             Xlog.appenderOpen(Xlog.LEVEL_DEBUG, Xlog.AppednerModeAsync, cachePath, logPath,
-                    "MarsSample", 0, "PUB_KEY");
+                    "Dlog", 0, "PUB_KEY");
             Xlog.setConsoleLogOpen(true);
         } else {
             Xlog.appenderOpen(Xlog.LEVEL_INFO, Xlog.AppednerModeAsync, cachePath, logPath,
-                    "MarsSample", 0, "PUB_KEY");
+                    "Dlog", 0, "PUB_KEY");
             Xlog.setConsoleLogOpen(false);
         }
 
@@ -216,5 +217,9 @@ public class Dlog {
         for (String tag : tags) {
             printErrStackTrace(tag, tr, format, obj);
         }
+    }
+
+    public static void upload(Context context) {
+        context.startService(new Intent(context, UploadService.class));
     }
 }

@@ -16,7 +16,22 @@ public class RemoteService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        Dlog.d(TagConstant.TAG_PROCESS, getClass().getSimpleName());
+
+        new Thread() {
+            @Override
+            public void run() {
+                super.run();
+
+                for (int i = 0; ; i++) {
+                    try {
+                        sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    Dlog.d(TagConstant.TAG_PROCESS, i + "");
+                }
+            }
+        }.start();
     }
 
     @Override

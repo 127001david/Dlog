@@ -1,2 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.rightpoint.dlog" />
+    package="com.rightpoint.dlog">
+
+    <application>
+        <service
+            android:name=".UploadService"
+            android:process=":uploadlog" />
+    </application>
+
+</manifest>

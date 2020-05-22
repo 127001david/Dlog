@@ -8,12 +8,21 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.rightpoint.dlog.Dlog;
 
+import java.util.LinkedHashSet;
+import java.util.Set;
+
+import cn.jpush.android.api.JPushInterface;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Set<String> tags = new LinkedHashSet<>();
+        tags.add("tag1");
+        JPushInterface.setTags(this, 1, tags);
 
         findViewById(R.id.btn_log_d).setOnClickListener(new View.OnClickListener() {
             @Override
