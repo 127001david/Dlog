@@ -44,7 +44,6 @@ public class DlogManagerService extends Service {
         @Override
         public List<String> prepareLogFiles() throws RemoteException {
             flush();
-            Dlog.d(new String[]{"flushDlog", "logUpload"}, "flush all complete.");
             return getLogFilesPath();
         }
     }
@@ -65,16 +64,16 @@ public class DlogManagerService extends Service {
     }
 
     private List<String> getLogFilesPath() {
-        File f = new File(getApplication().getFilesDir() + "/xlog/");
+        File logPath = new File(getApplication().getFilesDir() + "/xlog/log");
         List<String> filesPath = new ArrayList<>();
 
-        if (f.exists()) {
-            File[] files = f.listFiles();
+        if (logPath.exists()) {
+            File[] files = logPath.listFiles();
             if (null != files) {
                 for (File file : files) {
-                    File[] files1 = file.listFiles();
-                    if (null != files1) {
-                        for (File listFile : files1) {
+                    File[] processLogPath = file.listFiles();
+                    if (null != processLogPath) {
+                        for (File listFile : processLogPath) {
                             if (listFile.getName().endsWith(".xlog")) {
                                 filesPath.add(listFile.getPath());
                             }

@@ -19,6 +19,7 @@ public class MyApplication extends Application {
         Dlog.getInstance().init(this);
         Dlog.d(TagConstant.TAG_PROCESS, Dlog.getProcessName(this));
 
+        // JPush仅会在主进程初始化
         JPushInterface.setDebugMode(true);
         JPushInterface.init(this);
 

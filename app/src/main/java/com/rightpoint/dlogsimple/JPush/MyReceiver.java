@@ -43,6 +43,8 @@ public class MyReceiver extends BroadcastReceiver {
                 // 准备上传文件 Dlog.prepareLogFiles() 方法返回的是日志文件的文件路径
                 List<String> filesPath = Dlog.prepareLogFiles();
 
+                Dlog.d(new String[]{"flushDlog", "logUpload"}, "flush all complete.");
+
                 if (null == filesPath || 0 == filesPath.size()) {
                     Dlog.d(TagConstant.LOG_UPLOAD, "log files path is null");
                     return;

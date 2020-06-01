@@ -6,7 +6,6 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.os.Environment;
 import android.os.IBinder;
 import android.os.RemoteException;
 
@@ -53,11 +52,10 @@ public class Dlog {
         System.loadLibrary("c++_shared");
         System.loadLibrary("marsxlog");
 
-        String SDCARD = Environment.getExternalStorageDirectory().getAbsolutePath();
         String processName = getProcessName(application);
-        String logPath = SDCARD + "/mars/log/" + processName;
+        String logPath = application.getFilesDir() + "/xlog/log/" + processName;
 
-        String cachePath = application.getFilesDir() + "/xlog/" + processName;
+        String cachePath = application.getFilesDir() + "/xlog/cache/" + processName;
 
         if (BuildConfig.DEBUG) {
             Xlog.appenderOpen(Xlog.LEVEL_DEBUG, Xlog.AppednerModeAsync, cachePath, logPath,
