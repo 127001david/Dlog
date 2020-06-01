@@ -16,7 +16,7 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-        Dlog.init(this);
+        Dlog.getInstance().init(this);
         Dlog.d(TagConstant.TAG_PROCESS, Dlog.getProcessName(this));
 
         JPushInterface.setDebugMode(true);

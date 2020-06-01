@@ -1,9 +1,14 @@
 package com.rightpoint.dlog;
 
 import android.app.ActivityManager;
+import android.app.Application;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Environment;
+import android.os.IBinder;
+import android.os.RemoteException;
 
 import androidx.annotation.NonNull;
 
@@ -18,6 +23,7 @@ import java.util.List;
  * Create date：2020/5/20 10:08 AM 
  */
 public class Dlog {
+    private static IDlogManager mDlogManager;
     /*
     // 行号
     Thread.currentThread().getStackTrace()[1].getLineNumber();
@@ -27,15 +33,31 @@ public class Dlog {
     Thread.currentThread().getStackTrace()[1].getClassName();
      */
 
-    public static void init(Context context) {
+    private Dlog() {
+
+    }
+
+    private static class SingleInstance {
+        private static Dlog INSTANCE = new Dlog();
+    }
+
+    public static Dlog getInstance() {
+        return SingleInstance.INSTANCE;
+    }
+
+    private Application mApplication;
+
+    public void init(Application application) {
+        mApplication = application;
+
         System.loadLibrary("c++_shared");
         System.loadLibrary("marsxlog");
 
         String SDCARD = Environment.getExternalStorageDirectory().getAbsolutePath();
-        String processName = getProcessName(context);
+        String processName = getProcessName(application);
         String logPath = SDCARD + "/mars/log/" + processName;
 
-        String cachePath = context.getFilesDir() + "/xlog/" + processName;
+        String cachePath = application.getFilesDir() + "/xlog/" + processName;
 
         if (BuildConfig.DEBUG) {
             Xlog.appenderOpen(Xlog.LEVEL_DEBUG, Xlog.AppednerModeAsync, cachePath, logPath,
@@ -48,6 +70,9 @@ public class Dlog {
         }
 
         Log.setLogImp(new Xlog());
+
+        application.bindService(new Intent(application, DlogManagerService.class),
+                getServiceConnection(), Context.BIND_AUTO_CREATE);
     }
 
     public static String getProcessName(Context cxt) {
@@ -219,7 +244,47 @@ public class Dlog {
         }
     }
 
-    public static void upload(Context context) {
-        context.startService(new Intent(context, UploadService.class));
+    /**
+     * 该方法实现了多进程同步调用，存在耗时较长可能，所以建议在子线程调用
+     * @return APP目录下所有.xlog日志文件的路径
+     */
+    public static List<String> prepareLogFiles() {
+        if (null != mDlogManager) {
+            try {
+                return mDlogManager.prepareLogFiles();
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return null;
+    }
+
+    private ServiceConnection getServiceConnection() {
+        return new ServiceConnection() {
+            @Override
+            public void onServiceConnected(ComponentName name, IBinder service) {
+                mDlogManager = IDlogManager.Stub.asInterface(service);
+
+                d("dlog", "onServiceConnected");
+
+                try {
+                    mDlogManager.registerListener(new IOnNeedFlushListener.Stub() {
+                        @Override
+                        public void onNeedFlushLogCache() throws RemoteException {
+                            d("flushDlog", getProcessName(mApplication) + " onFlushLogCache");
+                            Log.appenderFlush(true);
+                        }
+                    });
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onServiceDisconnected(ComponentName name) {
+
+            }
+        };
     }
 }

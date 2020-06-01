@@ -27,21 +27,21 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.btn_log_d).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Dlog.d(new String[]{TagConstant.TAG_PROCESS, "s"}, "");
+                Dlog.d(new String[]{com.rightpoint.dlogsimple.TagConstant.TAG_PROCESS, "s"}, "");
             }
         });
 
         findViewById(R.id.btn_remote_activity).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, RemoteActivity.class));
+                startActivity(new Intent(MainActivity.this, com.rightpoint.dlogsimple.RemoteActivity.class));
             }
         });
 
         findViewById(R.id.btn_remote_service).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startService(new Intent(MainActivity.this, RemoteService.class));
+                startService(new Intent(MainActivity.this, com.rightpoint.dlogsimple.RemoteService.class));
             }
         });
     }

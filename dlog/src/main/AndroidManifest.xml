@@ -4,7 +4,7 @@
 
     <application>
         <service
-            android:name=".UploadService"
+            android:name=".DlogManagerService"
             android:process=":uploadlog" />
     </application>
 
