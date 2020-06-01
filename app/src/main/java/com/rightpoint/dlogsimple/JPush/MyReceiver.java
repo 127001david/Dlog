@@ -40,6 +40,7 @@ public class MyReceiver extends BroadcastReceiver {
             if ("1".equals(msg)) {
                 Toast.makeText(context, "收到自定义消息", Toast.LENGTH_SHORT).show();
 
+                // 准备上传文件 Dlog.prepareLogFiles() 方法返回的是日志文件的文件路径
                 List<String> filesPath = Dlog.prepareLogFiles();
 
                 if (null == filesPath || 0 == filesPath.size()) {
